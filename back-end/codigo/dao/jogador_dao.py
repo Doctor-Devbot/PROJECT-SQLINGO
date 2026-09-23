@@ -1,42 +1,86 @@
-from model.jogador import Jogador
+from sqlalchemy import text
+from services.db_service import db
 
 class JogadorDAO:
-    def __init__(self):
-        self._database = [
-            Jogador("Marco", "marco@gmail.com"),
-            Jogador("Julia", "julia@gmail.com")
+
+    @staticmethod
+    def criar_tabela_jogador():
+        sql = text("""
+            CREATE TABLE IF NOT EXISTS jogadores (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL
+            );
+        """)
+        db.session.execute(sql)
+        db.session.commit()
+        JogadorDAO.popular_tabela()
+
+    @staticmethod
+    def popular_tabela():
+        sql = text("""
+            INSERT OR IGNORE INTO jogadores (nome, email)
+            VALUES (:nome, :email);
+        """)
+        jogadores_lote = [
+            {"nome": "Marco", "email": "marco@gmail.com"},
+            {"nome": "Julia", "email": "julia@gmail.com"}
         ]
+        db.session.execute(sql, jogadores_lote)
+        db.session.commit()
 
-    def create(self, nome, email):
-        existente = next((j for j in self._database if j.get_email() == email), None)
-        if existente:
+    @staticmethod
+    def create(nome, email):
+        if JogadorDAO.retrieve_by_email(email):
             return None
-        jogador = Jogador(nome, email)
-        self._database.append(jogador)
-        return jogador.to_dic()
 
-    def retrieve_by_email(self, email):
-        jogador = next((j for j in self._database if j.get_email() == email), None)
-        if jogador:
-            return jogador.to_dic()
-        return None
+        sql = text("""
+            INSERT INTO jogadores (nome, email)
+            VALUES (:nome, :email);
+        """)
+        db.session.execute(sql, {"nome": nome, "email": email})
+        db.session.commit()
 
-    def retrieve_all(self):
-        return [j.to_dic() for j in self._database]
+        return JogadorDAO.retrieve_by_email(email)
 
-    def update_nome(self, email, nome):
-        jogador = next((j for j in self._database if j.get_email() == email), None)
-        if jogador:
-            jogador.set_nome(nome)
-            return jogador.to_dic()
-        return None
+    @staticmethod
+    def retrieve_by_email(email):
+        sql = text("SELECT id, nome, email FROM jogadores WHERE email = :email;")
+        res = db.session.execute(sql, {"email": email}).fetchone()
+        return dict(res._mapping) if res else None
 
-    def delete(self, email):
-        jogador = next((j for j in self._database if j.get_email() == email), None)
-        if jogador:
-            self._database.remove(jogador)
-            return jogador.to_dic()
-        return None
+    @staticmethod
+    def retrieve_all():
+        sql = text("SELECT id, nome, email FROM jogadores;")
+        res = db.session.execute(sql).fetchall()
+        return [dict(r._mapping) for r in res]
 
-    def size(self):
-        return len(self._database)
+    @staticmethod
+    def update_nome(email, nome):
+        jogador = JogadorDAO.retrieve_by_email(email)
+        if not jogador:
+            return None
+
+        sql = text("UPDATE jogadores SET nome = :nome WHERE email = :email;")
+        db.session.execute(sql, {"nome": nome, "email": email})
+        db.session.commit()
+
+        return JogadorDAO.retrieve_by_email(email)
+
+    @staticmethod
+    def delete(email):
+        jogador = JogadorDAO.retrieve_by_email(email)
+        if not jogador:
+            return None
+
+        sql = text("DELETE FROM jogadores WHERE email = :email;")
+        db.session.execute(sql, {"email": email})
+        db.session.commit()
+
+        return jogador
+
+    @staticmethod
+    def size():
+        sql = text("SELECT COUNT(*) FROM jogadores;")
+        res = db.session.execute(sql).scalar()
+        return res
