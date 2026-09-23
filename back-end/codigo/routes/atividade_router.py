@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from services import atividade_dao
+from dao.atividade_dao import AtividadeDAO
 
 atividade_bp = Blueprint('atividade', __name__)
 
@@ -7,7 +7,7 @@ atividade_bp = Blueprint('atividade', __name__)
 @atividade_bp.route("/atividade", methods=["POST"])
 def cadastrar_atividade():
     nova_atividade = request.get_json()
-    atividade_criada = atividade_dao.create(nova_atividade["id_atividade"], nova_atividade["enunciado"], nova_atividade.get("alternativas", []))
+    atividade_criada = AtividadeDAO.create(nova_atividade["id_atividade"], nova_atividade["enunciado"], nova_atividade.get("alternativas", []))
     if atividade_criada is None:
         return {"erro": "ID de atividade já cadastrado"}, 400
     return atividade_criada, 201
@@ -15,14 +15,14 @@ def cadastrar_atividade():
 # GET /atividade
 @atividade_bp.route("/atividade", methods=["GET"])
 def todas_atividades():
-    if atividade_dao.size() == 0:
+    if AtividadeDAO.size() == 0:
         return {"erro": "Nenhuma atividade cadastrada"}, 404
-    return atividade_dao.retrieve_all(), 200
+    return AtividadeDAO.retrieve_all(), 200
 
 # GET /atividade/1
 @atividade_bp.route("/atividade/<int:id_atividade>", methods=["GET"])
 def buscar_atividade(id_atividade):
-    atividade_encontrada = atividade_dao.retrieve_by_id(id_atividade)
+    atividade_encontrada = AtividadeDAO.retrieve_by_id(id_atividade)
     if atividade_encontrada is None:
         return {"erro": "Atividade não encontrada"}, 404
     return atividade_encontrada, 200
@@ -30,7 +30,7 @@ def buscar_atividade(id_atividade):
 # DELETE /atividade/1
 @atividade_bp.route("/atividade/<int:id_atividade>", methods=["DELETE"])
 def remover_atividade(id_atividade):
-    atividade = atividade_dao.delete(id_atividade)
+    atividade = AtividadeDAO.delete(id_atividade)
     if atividade is None:
         return {"erro": "Atividade não encontrada"}, 404
     return atividade, 200
@@ -39,7 +39,7 @@ def remover_atividade(id_atividade):
 @atividade_bp.route("/atividade/<int:id_atividade>", methods=["PUT"])
 def atualizar_enunciado(id_atividade):
     dados = request.get_json()
-    atividade_atualizada = atividade_dao.update_enunciado(id_atividade, dados["enunciado"])
+    atividade_atualizada = AtividadeDAO.update_enunciado(id_atividade, dados["enunciado"])
     if atividade_atualizada is None:
         return {"erro": "Atividade não encontrada"}, 404
     return atividade_atualizada, 200

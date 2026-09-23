@@ -1,20 +1,17 @@
 from dao.jogador_dao import JogadorDAO
 
 class JogadorRepository:
-    def obter_perfil_completo(self, usuario_id):
-        # 1. Busca dados cadastrais bsicos no DAO
-        cadastrais = JogadorDAO.buscar_dados_cadastrais(usuario_id)
-        if not cadastrais:
-            return None
-        # 2. Busca dados de segurança/acesso no DAO
-        seguranca = JogadorDAO.buscar_dados_seguranca(usuario_id)
-        # 3. Combina os resultados no objeto do usuário
-        cadastrais.perfil = seguranca["ativo"]
-        cadastrais.nivel_acesso = seguranca["nivel_acesso"]
-        return cadastrais
+    
+    def obter_perfil_completo(self, email):
+        # Como o banco de dados atual de Jogador não possui tabelas separadas 
+        # para segurança ou nível de acesso, apenas retornamos os dados existentes.
+        jogador = JogadorDAO.retrieve_by_email(email)
+        return jogador
 
     def salvar(self, nome, email):
-        JogadorDAO.criar(nome, email)
+        # Utiliza o método 'create' que definimos no JogadorDAO
+        return JogadorDAO.create(nome, email)
 
     def email_ja_cadastrado(self, email):
-        return JogadorDAO.buscar_id_por_email(email) is not None
+        # Se retornar algo diferente de None, o e-mail já existe
+        return JogadorDAO.retrieve_by_email(email) is not None
