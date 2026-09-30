@@ -82,5 +82,4 @@ class JogadorDAO:
     @staticmethod
     def size():
         sql = text("SELECT COUNT(*) FROM jogadores;")
-        res = db.session.execute(sql).scalar()
-        return res
+        return db.session.execute(sql).scalar()

@@ -1,20 +1,21 @@
 from dao.atividade_dao import AtividadeDAO
 
 class AtividadeRepository:
-    def obter_perfil_completo(self, atividade_id):
-        # 1. Busca dados cadastrais bsicos no DAO
-        cadastrais = AtividadeDAO.buscar_dados_cadastrais(atividade_id)
-        if not cadastrais:
-            return None
-        # 2. Busca dados de segurança/acesso no DAO
-        seguranca = AtividadeDAO.buscar_dados_seguranca(atividade_id)
-        # 3. Combina os resultados no objeto do usuário
-        cadastrais.perfil = seguranca["ativo"]
-        cadastrais.nivel_acesso = seguranca["nivel_acesso"]
-        return cadastrais
 
-    def salvar(self, enunciado):
-        AtividadeDAO.criar(enunciado)
+    def buscar_por_id(self, atividade_id):
+        return AtividadeDAO.retrieve_by_id(atividade_id)
 
-    #def email_ja_cadastrado(self, email):
-        #return AtividadeDAO.buscar_id_por_email(email) is not None
+    def buscar_todas(self):
+        return AtividadeDAO.retrieve_all()
+
+    def salvar(self, enunciado, alternativas, id_atividade=None):
+        return AtividadeDAO.create(enunciado, alternativas, id_atividade)
+
+    def atualizar(self, atividade_id, enunciado=None, alternativas=None):
+        return AtividadeDAO.update(atividade_id, enunciado, alternativas)
+
+    def deletar(self, atividade_id):
+        return AtividadeDAO.delete(atividade_id)
+
+    def quantidade(self):
+        return AtividadeDAO.size()
