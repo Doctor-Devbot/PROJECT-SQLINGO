@@ -1,8 +1,7 @@
 #caminhoPrincipal {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 60%;            
+  align-items: center;            
   margin: 2rem auto;      
   background-color: var(--corFundoDestaque);
   border-radius: 1rem;

@@ -4,57 +4,76 @@ import './Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [atividades, setAtividades] = useState([]);
+  const [modulos, setModulos] = useState([]);
+  const [listasAtividade, setListasAtividade] = useState([]);
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
-    // Faz a requisição para o back-end Flask para buscar as atividades cadastradas
-    // Lembre-se de ajustar a URL conforme o prefixo da sua rota no Flask
-    fetch('http://localhost:5000/atividade') // ou '/api/atividades' dependendo do seu blueprint
-      .then((res) => {
-        if (!res.ok) throw new Error('Erro ao carregar as atividades');
+    // Busca os módulos e as listas de atividades simultaneamente do back-end Flask
+    Promise.all([
+      fetch('http://localhost:5000/modulo').then((res) => {
+        if (!res.ok) throw new Error('Erro ao carregar os módulos');
+        return res.json();
+      }),
+      fetch('http://localhost:5000/lista-atividade').then((res) => {
+        if (!res.ok) throw new Error('Erro ao carregar as listas de atividades');
         return res.json();
       })
-      .then((data) => {
-        console.log("DADOS RECEBIDOS DO FLASK:", data); // <--- OLHE ISSO AQUI NO CONSOLE
-        setAtividades(data);
+    ])
+      .then(([dadosModulos, dadosListas]) => {
+        console.log("MÓDULOS RECEBIDOS:", dadosModulos);
+        console.log("LISTAS RECEBIDAS:", dadosListas);
+        setModulos(dadosModulos);
+        setListasAtividade(dadosListas);
       })
       .catch((err) => {
         console.error(err);
-        setErro('Não foi possível carregar os módulos.');
+        setErro('Não foi possível carregar os dados da página.');
       });
   }, []);
 
   return (
-    <section id="caminhoPrincipal">
-      <h1>1- Introdução</h1>
-      
-      {erro && <p style={{ color: 'red' }}>{erro}</p>}
+    <div className="home-container">
+      {erro && <p style={{ color: 'red', textAlign: 'center' }}>{erro}</p>}
 
-      {/* Renderiza os botões dinamicamente com base no banco de dados */}
-      <div className="botoes-container">
-        {atividades.length > 0 ? (
-          atividades.map((atividade, index) => (
-            <button 
-              key={atividade.id || index} 
-              className="btn-circulo" 
-              onClick={() => navigate(`/atividade`)} // Você pode passar o ID se precisar: `/atividade/${atividade.id}`
-            >
-              {index + 1}
-            </button>
-          ))
-        ) : (
-          // Caso a API demore ou não retorne nada, mantém um comportamento padrão
-          <>
-            <button className="btn-circulo" onClick={() => navigate('/atividade')}>
-              1
-            </button>
-            <button className="btn-circulo" onClick={() => navigate('/atividade')}>
-              2
-            </button>
-          </>
-        )}
-      </div>
-    </section>
+      {/* Renderiza um bloco (caminhoPrincipal) para cada Módulo */}
+      {modulos.length > 0 ? (
+        modulos.map((modulo) => {
+          // Filtra apenas as listas que pertencem a este módulo específico
+          const listasDoModulo = listasAtividade.filter(
+            (lista) => lista.modulo_id === modulo.id
+          );
+
+          return (
+            <section key={modulo.id} id="caminhoPrincipal">
+              <h1>{modulo.titulo}</h1>
+
+              {/* Botões criados dinamicamente de acordo com a quantidade de listas do módulo */}
+              <div className="botoes-container">
+                {listasDoModulo.length > 0 ? (
+                  listasDoModulo.map((lista, index) => (
+                    <button
+                      key={lista.id}
+                      className="btn-circulo"
+                      onClick={() => navigate(`/atividade`)} // Poderia ser `/atividade/${lista.id}` se quiser especificar
+                      title={lista.titulo} // Mostra o título da lista ao passar o mouse
+                    >
+                      {index + 1}
+                    </button>
+                  ))
+                ) : (
+                  <p style={{ fontSize: '0.9rem', color: '#666' }}>Nenhuma lista cadastrada neste módulo.</p>
+                )}
+              </div>
+            </section>
+          );
+        })
+      ) : (
+        // Fallback caso os dados ainda estejam carregando ou ocorra algum atraso
+        <section id="caminhoPrincipal">
+          <h1>Carregando módulos...</h1>
+        </section>
+      )}
+    </div>
   );
 }
