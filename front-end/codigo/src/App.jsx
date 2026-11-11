@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="comandos" element={<Commands />} />
-          <Route path="atividade" element={<Activity />} />
+          <Route path="/atividade/:idLista" element={<Activity />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -52,11 +52,11 @@ export default function Home() {
               <div className="botoes-container">
                 {listasDoModulo.length > 0 ? (
                   listasDoModulo.map((lista, index) => (
+                    // No map das listas dentro do seu Home.jsx:
                     <button
                       key={lista.id}
                       className="btn-circulo"
-                      onClick={() => navigate(`/atividade`)} // Poderia ser `/atividade/${lista.id}` se quiser especificar
-                      title={lista.titulo} // Mostra o título da lista ao passar o mouse
+                      onClick={() => navigate(`/atividade/${lista.id}`)} // <-- Passa o ID da lista na rota!
                     >
                       {index + 1}
                     </button>

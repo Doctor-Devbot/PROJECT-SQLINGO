@@ -10,7 +10,9 @@ class AtividadeDAO:
             CREATE TABLE IF NOT EXISTS atividades (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 enunciado TEXT NOT NULL,
-                alternativas TEXT NOT NULL
+                alternativas TEXT NOT NULL,
+                lista_atividade_id INTEGER,
+                FOREIGN KEY (lista_atividade_id) REFERENCES listas_atividade(id)
             );
         """)
         db.session.execute(sql)
@@ -20,24 +22,40 @@ class AtividadeDAO:
     @staticmethod
     def popular_tabela():
         sql = text("""
-            INSERT OR IGNORE INTO atividades (id, enunciado, alternativas)
-            VALUES (:id, :enunciado, :alternativas);
+            INSERT OR IGNORE INTO atividades (id, enunciado, alternativas, lista_atividade_id)
+            VALUES (:id, :enunciado, :alternativas, :lista_atividade_id);
         """)
         
+        # Distribuindo as atividades de exemplo para as listas correspondentes (ex: Lista 1 e Lista 2)
         atividades_lote = [
             {
                 "id": 1, 
                 "enunciado": "Qual comando SQL seleciona dados?", 
-                "alternativas": json.dumps(["SELECT", "INSERT", "DELETE", "UPDATE"])
+                "alternativas": json.dumps(["SELECT", "INSERT", "DELETE", "UPDATE"]),
+                "lista_atividade_id": 1  # Pertence à Lista 1
             },
             {
                 "id": 2, 
                 "enunciado": "Qual cláusula filtra registros?", 
-                "alternativas": json.dumps(["WHERE", "ORDER BY", "GROUP BY", "JOIN"])
+                "alternativas": json.dumps(["WHERE", "ORDER BY", "GROUP BY", "JOIN"]),
+                "lista_atividade_id": 1  # Pertence à Lista 1 também, ou à Lista 2
             }
         ]
         db.session.execute(sql, atividades_lote)
         db.session.commit()
+
+    @staticmethod
+    def retrieve_by_lista_id(lista_id):
+        # Novo método para buscar apenas as atividades de uma lista específica!
+        sql = text("SELECT id, enunciado, alternativas, lista_atividade_id FROM atividades WHERE lista_atividade_id = :lista_id;")
+        res = db.session.execute(sql, {"lista_id": lista_id}).fetchall()
+        
+        atividades = []
+        for r in res:
+            data = dict(r._mapping)
+            data["alternativas"] = json.loads(data["alternativas"])
+            atividades.append(data)
+        return atividades
 
     @staticmethod
     def create(enunciado, alternativas, id_atividade=None):
