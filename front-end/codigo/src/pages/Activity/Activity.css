@@ -1,0 +1,537 @@
+/* ==========================================================================
+   Atividade — quiz com barra de progresso, feedback colorido pela paleta
+   e tela final comemorativa (confete + mascote)
+   ========================================================================== */
+
+#containerPrincipal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.activity-erro {
+  color: var(--corErro);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.activity-carregando {
+  color: var(--corTextoSuave);
+  text-align: center;
+  margin-top: 50px;
+}
+
+#menuPrincipal {
+  width: 100%;
+  background: var(--corSuperficie);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioGrande);
+  box-shadow: var(--sombraCard);
+  padding-bottom: 2.5rem;
+  text-align: center;
+  overflow: hidden;
+  animation: surgirQuestao 0.45s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+@keyframes surgirQuestao {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Barra de progresso
+   -------------------------------------------------------------------------- */
+.progresso-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.8rem 0;
+}
+
+.progresso-texto {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--corTextoSuave);
+  white-space: nowrap;
+}
+
+.barra-progresso {
+  flex: 1;
+  height: 14px;
+  background: var(--corFundoDestaque);
+  border: 2px solid var(--corBorda);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra-progresso-preenchimento {
+  height: 100%;
+  background: var(--gradientePrimario);
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Enunciado
+   -------------------------------------------------------------------------- */
+#menuPrincipal h1 {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--corTextoPrincipal);
+  background: var(--corFundoDestaque);
+  border-bottom: 2px solid var(--corBorda);
+  border-radius: 0;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+#menuPrincipal h2 {
+  font-size: 1.45rem;
+  margin: 2.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  color: var(--corTextoPrincipal);
+  line-height: 1.5;
+}
+
+/* Botão de Dica */
+#dicaBotao {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+#dicaBotao:not(:disabled):hover {
+  transform: scale(1.15) rotate(-8deg);
+}
+
+#dicaBotao img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+#dicaBotao.dica-disable {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* --------------------------------------------------------------------------
+   Alternativas
+   -------------------------------------------------------------------------- */
+#menuPrincipal ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.6rem;
+  padding: 0 2.5rem;
+  width: 100%;
+}
+
+#menuPrincipal ul li {
+  width: 100%;
+}
+
+/* Classes Base e de Estado das Alternativas */
+.botao-opcao,
+.botao-selecionado,
+.botao-correto,
+.botao-errado,
+.botao-desabilitado {
+  position: relative;
+  width: 100%;
+  height: 5.2rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border: 2px solid transparent;
+  border-radius: var(--raioMedio);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2.8rem 0 1.2rem;
+}
+
+/* Estado Normal — botão 3D estilo jogo */
+.botao-opcao {
+  background: var(--corPrimaria);
+  color: var(--corTexto);
+  box-shadow: 0 5px 0 var(--corPrimariaEscura), var(--sombraSuave);
+}
+
+.botao-opcao:hover {
+  filter: brightness(1.07);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 var(--corPrimariaEscura), var(--sombraSuave);
+}
+
+.botao-opcao:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--corPrimariaEscura);
+}
+
+/* Estado Selecionado */
+.botao-selecionado {
+  background: var(--corPrimariaEscura);
+  color: var(--corTexto);
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--corPrimariaEscura), var(--sombraPrensada);
+  border-color: var(--corPrimariaClara);
+}
+
+/* Estados Pós-Verificação — ícones desenhados em SVG */
+.botao-correto {
+  background: var(--corAcerto);
+  color: #ffffff;
+  cursor: default;
+  border-color: var(--corAcerto);
+  animation: comemorar 0.5s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+:root[data-theme='verde'] .botao-correto {
+  color: #06170d;
+}
+
+.botao-correto::after {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  position: absolute;
+  right: 1.2rem;
+  width: 26px;
+  height: 26px;
+}
+
+:root[data-theme='verde'] .botao-correto::after {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306170d' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+
+@keyframes comemorar {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  70% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+.botao-errado {
+  background: var(--corErro);
+  color: #ffffff;
+  cursor: default;
+  border-color: var(--corErro);
+  animation: tremer 0.4s ease;
+}
+
+.botao-errado::after {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E");
+  position: absolute;
+  right: 1.2rem;
+  width: 26px;
+  height: 26px;
+}
+
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.botao-desabilitado {
+  background: var(--corFundoDestaque);
+  color: var(--corTextoSuave);
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Botão Verificar / Próxima
+   -------------------------------------------------------------------------- */
+#verificarBotao {
+  background: var(--corPrimaria);
+  color: var(--corTexto);
+  border: none;
+  font-size: 1.4rem;
+  font-weight: 900;
+  width: 14rem;
+  height: 4.2rem;
+  margin-top: 2.2rem;
+  border-radius: var(--raioMedio);
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--corPrimariaEscura), var(--sombraSuave);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.2s ease,
+    background-color 0.25s ease;
+}
+
+#verificarBotao:not(:disabled):hover {
+  filter: brightness(1.07);
+}
+
+#verificarBotao:not(:disabled):active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--corPrimariaEscura);
+}
+
+#verificarBotao:disabled {
+  background: var(--corBorda);
+  color: var(--corTextoSuave);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Próxima após acerto: verde; após erro: mantém a primária */
+#verificarBotao.btn-proxima-acerto {
+  background: var(--corAcerto);
+  box-shadow: 0 5px 0 var(--corAcerto), var(--sombraSuave);
+}
+
+:root[data-theme='verde'] #verificarBotao.btn-proxima-acerto {
+  box-shadow: 0 5px 0 #17a34a, var(--sombraSuave);
+  color: #06170d;
+}
+
+/* Botão Sair (tela final) */
+.btn-sair {
+  background: var(--corSuperficie);
+  color: var(--corPrimaria);
+  border: 2px solid var(--corPrimaria);
+}
+
+.btn-sair:hover {
+  filter: none;
+  background: var(--corFundoDestaque);
+}
+
+.btn-sair:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--corPrimariaEscura);
+}
+
+/* --------------------------------------------------------------------------
+   Tela de Finalização
+   -------------------------------------------------------------------------- */
+.card-finalizacao-conteudo h1 {
+  margin-top: 0.5rem;
+  font-size: 2.3rem;
+  font-weight: 900;
+  color: var(--corPrimaria);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.card-finalizacao-conteudo h2 {
+  font-size: 1.15rem;
+  color: var(--corTextoSuave);
+  margin: 0.2rem 0 0;
+}
+
+.finalizacao-mascote {
+  width: 150px;
+  margin: 1.2rem auto 0;
+}
+
+/*.finalizacao-stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 2.2rem;
+  padding: 0 2.5rem;
+}*/
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 200px;
+}
+
+.stat-box p {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--corTextoSuave);
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  width: 100%;
+}
+
+.stat-value {
+  width: 100%;
+  height: 5.2rem;
+  background: var(--gradientePrimario);
+  color: var(--corTexto);
+  font-size: 1.8rem;
+  font-weight: 900;
+  border-radius: var(--raioMedio);
+  box-shadow: 0 5px 0 var(--corPrimariaEscura), var(--sombraSuave);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulsarSuave 2.8s ease-in-out infinite;
+}
+
+/*.finalizacao-botoes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 2.4rem;
+  padding: 0 1.5rem 0.5rem;
+  flex-wrap: wrap;
+}*/
+/* Garante que as caixas de cima e os botões de baixo tenham a mesma largura total e colunas idênticas */
+.finalizacao-stats-container,
+.finalizacao-botoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.finalizacao-botoes {
+  margin-top: 20px;
+}
+
+.stat-box,
+.finalizacao-botoes button {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important; /* Remove qualquer margem lateral da classe .btn-3d */
+  box-sizing: border-box;
+}
+
+.finalizacao-botoes button {
+  height: 54px; /* Garante exatamente a mesma altura nos dois botões */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap; /* Impede que "Praticar de novo" quebre em 2 linhas */
+  padding: 0 12px;
+}
+
+
+
+/* Mesma altura para os dois botões da tela final */
+.finalizacao-botoes .btn-3d {
+  height: 4.2rem;
+  font-size: 1.4rem;
+  padding: 0 1.8rem;
+}
+
+/* --------------------------------------------------------------------------
+   Confete
+   -------------------------------------------------------------------------- */
+.confete-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.confete-container span {
+  position: absolute;
+  top: -20px;
+  width: 11px;
+  height: 16px;
+  border-radius: 3px;
+  opacity: 0.9;
+  animation: cairConfete linear infinite;
+  transform: rotate(var(--rotacao-confete, 0deg));
+}
+
+@keyframes cairConfete {
+  0% {
+    transform: translateY(-4vh) rotate(0deg);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(104vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsividade
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  #menuPrincipal {
+    width: 100%;
+  }
+
+  #menuPrincipal h2 {
+    font-size: 1.15rem;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  #menuPrincipal ul {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 0 1.4rem;
+  }
+
+  #menuPrincipal ul li {
+    width: 100%;
+  }
+
+  .botao-opcao,
+  .botao-selecionado,
+  .botao-correto,
+  .botao-errado,
+  .botao-desabilitado {
+    height: 4.4rem;
+    font-size: 1.15rem;
+    padding-right: 2.6rem;
+  }
+
+  .progresso-cabecalho {
+    padding: 1rem 1.2rem 0;
+  }
+
+  .finalizacao-stats-container {
+    gap: 1.2rem;
+  }
+}
+
+.finalizacao-botoes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px; /* Espaço entre os dois botões */
+  margin-top: 24px;
+}
+
+.finalizacao-botoes button {
+  margin: 0; /* Zera qualquer margem externa herdada */
+  min-width: 180px; /* Garante que ambos tenham a mesma largura */
+}

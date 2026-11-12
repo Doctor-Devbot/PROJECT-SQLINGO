@@ -1,0 +1,311 @@
+/* ==========================================================================
+   Barra lateral — mantém a estrutura original, com estado ativo animado,
+   ícones e seletor de paletas de cor
+   ========================================================================== */
+
+#menuLateral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15%;
+  min-width: 200px;
+  height: 100%;
+  background-color: var(--corFundoDestaque);
+  border-right: 2px solid var(--corBorda);
+  padding: 1.2rem 0 1rem;
+  z-index: 100;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+/* Logo dentro de um chip branco para funcionar em qualquer tema */
+.logo-chip {
+  display: block;
+  background: #ffffff;
+  border-radius: var(--raioMedio);
+  padding: 0.5rem 0.8rem;
+  margin-top: 0.6rem;
+  box-shadow: var(--sombraSuave);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logo-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombraCard);
+}
+
+#logo {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Navegação ---------- */
+.menu-nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 84%;
+  margin-top: 2.2rem;
+  gap: 0.7rem;
+}
+
+#menuLateral .btn-global {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  height: 3.4rem;
+  padding: 0 1rem;
+  border: 2px solid transparent;
+  border-radius: var(--raioMedio);
+  background: transparent;
+  color: var(--corTextoSuave);
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+#menuLateral .btn-global:hover {
+  background: var(--corSuperficie);
+  color: var(--corPrimaria);
+  border-color: var(--corBorda);
+  transform: translateY(-2px);
+}
+
+#menuLateral .btn-global:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+#menuLateral .btn-global.ativo {
+  background: var(--gradientePrimario);
+  color: var(--corTexto);
+  border-color: transparent;
+  box-shadow: var(--sombraSuave);
+}
+
+.aba-icone {
+  display: flex;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.aba-icone svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Pílula deslizante: acompanha a aba ativa com uma transição elástica */
+.indicador-aba {
+  position: absolute;
+  left: -0.55rem;
+  width: 5px;
+  border-radius: 999px;
+  background: var(--corPrimaria);
+  box-shadow: 0 0 10px var(--corPrimaria);
+  opacity: 0;
+  transform: scaleY(0);
+  transition: top 0.45s cubic-bezier(0.34, 1.4, 0.44, 1),
+    height 0.45s cubic-bezier(0.34, 1.4, 0.44, 1),
+    opacity 0.3s ease, transform 0.3s ease;
+}
+
+.indicador-aba.visivel {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* ---------- Seletor de paletas ---------- */
+.seletor-paleta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: 84%;
+  padding-top: 1.2rem;
+  border-top: 2px dashed var(--corBorda);
+}
+
+.seletor-titulo {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--corTextoSuave);
+}
+
+.seletor-opcoes {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.swatch {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  padding: 4px;
+  border-radius: 50%;
+  border: 2px solid var(--corBordaForte);
+  background: var(--corSuperficie);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.12);
+}
+
+.swatch.ativo {
+  border-color: var(--corPrimaria);
+  box-shadow: 0 0 0 3px var(--corPrimariaClara);
+  transform: scale(1.12);
+}
+
+.swatch-cor {
+  flex: 1;
+}
+
+.swatch-cor:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.swatch-cor:last-child {
+  border-radius: 0 999px 999px 0;
+}
+
+.seletor-nome {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--corTextoSuave);
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 1024px) {
+  #menuLateral {
+    width: 20%;
+    min-width: 170px;
+  }
+
+  #menuLateral .btn-global {
+    font-size: 1rem;
+    height: 3rem;
+  }
+
+  .aba-icone {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Mobile: sidebar vira barra superior */
+@media (max-width: 768px) {
+  #menuLateral {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border-right: none;
+    border-bottom: 2px solid var(--corBorda);
+  }
+
+  .logo-chip {
+    margin-top: 0;
+    padding: 0.3rem 0.6rem;
+    max-width: 130px;
+  }
+
+  .menu-nav {
+    flex-direction: row;
+    width: auto;
+    margin-top: 0;
+    gap: 0.5rem;
+  }
+
+  #menuLateral .btn-global {
+    width: auto;
+    height: 2.6rem;
+    padding: 0 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  /* No mobile o indicador vira um sublinhado */
+  .indicador-aba {
+    left: 0.9rem;
+    right: 0.9rem;
+    top: auto;
+    bottom: -0.75rem;
+    width: auto;
+    height: 5px !important;
+  }
+
+  .seletor-paleta {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+    gap: 0.3rem;
+  }
+
+  .seletor-titulo,
+  .seletor-nome {
+    display: none;
+  }
+
+  .seletor-opcoes {
+    gap: 0.4rem;
+  }
+
+  .swatch {
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+  }
+}
+
+/* Telas muito estreitas: mais respiro no cabeçalho */
+@media (max-width: 480px) {
+  #menuLateral {
+    padding: 0.6rem 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .logo-chip {
+    max-width: 104px;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .menu-nav {
+    gap: 0.35rem;
+  }
+
+  #menuLateral .btn-global {
+    padding: 0 0.6rem;
+    font-size: 0.85rem;
+    height: 2.4rem;
+    gap: 0.4rem;
+  }
+
+  .aba-icone {
+    width: 18px;
+    height: 18px;
+  }
+
+  .seletor-paleta {
+    gap: 0.15rem;
+  }
+
+  .swatch {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+  }
+}

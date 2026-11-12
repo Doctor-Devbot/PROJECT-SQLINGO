@@ -1,0 +1,400 @@
+/* ==========================================================================
+   Comandos — grade de cartões + caixa de detalhes (modal)
+   ========================================================================== */
+
+#comandos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  gap: 2.2rem;
+}
+
+.comandos-cabecalho {
+  text-align: center;
+  width: 100%;
+}
+
+.comandos-cabecalho h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--corTextoPrincipal);
+}
+
+.comandos-cabecalho p {
+  color: var(--corTextoSuave);
+  font-size: 1.02rem;
+  max-width: 38rem;
+  margin: 0.4rem auto 0;
+}
+
+/* --------------------------------------------------------------------------
+   Seções (DML / DDL)
+   -------------------------------------------------------------------------- */
+.secao-comandos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--corSuperficie);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioGrande);
+  box-shadow: var(--sombraSuave);
+  padding-bottom: 2rem;
+  overflow: hidden;
+}
+
+.secao-cabecalho {
+  background: var(--gradientePrimario);
+  padding: 1.2rem 2rem;
+  color: var(--corTexto);
+}
+
+.secao-cabecalho h1 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--corTexto);
+}
+
+.secao-cabecalho p {
+  font-size: 0.92rem;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.secao-lista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.3rem;
+  padding: 1.8rem 2rem 0.2rem;
+  width: 100%;
+}
+
+.secao-lista li {
+  /* Cartões entram em cascata quando a página abre */
+  opacity: 0;
+  animation: surgirCartao 0.5s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+
+@keyframes surgirCartao {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Cartão de comando
+   -------------------------------------------------------------------------- */
+.btn-comando {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  height: 100%;
+  min-height: 11.5rem;
+  padding: 1.2rem 1.2rem 2.6rem;
+  background: var(--corFundoDestaque);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioMedio);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fontePrincipal);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-comando:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombraCard);
+  border-color: var(--corPrimaria);
+}
+
+.btn-comando:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* Barra colorida no topo do cartão, conforme a categoria */
+.btn-comando::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: var(--corPrimaria);
+}
+
+.btn-comando.categoria-ddl::before {
+  background: var(--corSecundaria);
+}
+
+.btn-comando-categoria {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--corPrimaria);
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  padding: 0.12rem 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.btn-comando.categoria-ddl .btn-comando-categoria {
+  color: var(--corSecundaria);
+}
+
+.btn-comando-nome {
+  font-family: var(--fonteCodigo);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--corTextoPrincipal);
+  letter-spacing: 0.02em;
+}
+
+.btn-comando-resumo {
+  font-size: 0.9rem;
+  color: var(--corTextoSuave);
+  flex: 1;
+}
+
+.btn-comando-alerta {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 26px;
+  height: 26px;
+  color: var(--corErro);
+}
+
+.btn-comando-alerta svg {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-comando-cta {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--corPrimaria);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-comando-cta::after {
+  content: '→';
+  transition: transform 0.2s ease;
+}
+
+.btn-comando:hover .btn-comando-cta::after {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   Modal — caixa de detalhes do comando
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(10, 18, 25, 0.55);
+  backdrop-filter: blur(6px);
+  animation: aparecerOverlay 0.25s ease both;
+}
+
+:root[data-theme='verde'] .modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+@keyframes aparecerOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-caixa {
+  width: 100%;
+  max-width: 640px;
+  max-height: min(86vh, 720px);
+  display: flex;
+  flex-direction: column;
+  background: var(--corSuperficie);
+  border: 2px solid var(--corPrimaria);
+  border-radius: var(--raioGrande);
+  box-shadow: var(--sombraHover);
+  overflow: hidden;
+  animation: abrirModal 0.35s cubic-bezier(0.22, 1.3, 0.36, 1) both;
+}
+
+@keyframes abrirModal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.3rem 1.5rem;
+  background: var(--gradientePrimario);
+  color: var(--corTexto);
+}
+
+.modal-categoria {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  padding: 0.15rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.modal-titulo {
+  font-family: var(--fonteCodigo);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--corTexto);
+  flex: 1;
+}
+
+.modal-fechar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--raioPequeno);
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--corTexto);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.modal-fechar:hover {
+  background: rgba(255, 255, 255, 0.38);
+  transform: rotate(90deg);
+}
+
+.modal-fechar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modal-corpo {
+  padding: 1.5rem 1.6rem 1.7rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-bloco h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--corPrimaria);
+  margin-bottom: 0.45rem;
+}
+
+/* Marcador quadrado antes do título do bloco */
+.modal-bloco h3::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--corPrimaria);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.modal-bloco p {
+  color: var(--corTextoPrincipal);
+  font-size: 0.98rem;
+}
+
+.modal-dica {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  background: var(--corAvisoSuave);
+  border: 2px dashed var(--corAviso);
+  border-radius: var(--raioMedio);
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--corAviso);
+}
+
+.modal-dica.dica-alerta {
+  background: var(--corErroSuave);
+  border-color: var(--corErro);
+  color: var(--corErro);
+}
+
+.modal-dica-icone {
+  display: flex;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.modal-dica-icone svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Responsividade
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .secao-lista {
+    grid-template-columns: 1fr;
+    padding: 1.3rem 1.3rem 0.2rem;
+  }
+
+  .secao-cabecalho {
+    padding: 1rem 1.3rem;
+  }
+
+  .secao-cabecalho h1 {
+    font-size: 1.15rem;
+  }
+
+  .comandos-cabecalho h1 {
+    font-size: 1.5rem;
+  }
+
+  .modal-caixa {
+    max-height: 90vh;
+  }
+
+  .modal-corpo {
+    padding: 1.2rem 1.2rem 1.4rem;
+  }
+}

@@ -1,0 +1,11 @@
+Back-End, command-prompt:
+cd back-end/codigo
+python -m venv venv
+\venv\Scripts\Activate
+pip install flask flask-sqlalchemy flask-cors
+python app.py
+
+Front-End, git-bash:
+cd front-end/codigo
+npm install
+npm run dev

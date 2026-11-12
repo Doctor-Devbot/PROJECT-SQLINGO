@@ -1,0 +1,528 @@
+/* ==========================================================================
+   Home — boas-vindas com mascote e módulos em acordeão
+   ========================================================================== */
+
+.home-container {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.home-erro {
+  background: var(--corErroSuave);
+  color: var(--corErro);
+  border: 2px solid var(--corErro);
+  border-radius: var(--raioMedio);
+  padding: 1rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Fundo decorativo: palavras de SQL flutuando
+   -------------------------------------------------------------------------- */
+.decor-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.decor-fundo span {
+  position: absolute;
+  font-family: var(--fonteCodigo);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--corPrimaria);
+  opacity: 0.07;
+  white-space: nowrap;
+  animation: flutuarLento 9s ease-in-out infinite;
+}
+
+.decor-fundo span:nth-child(1) { top: 12%; left: 6%; }
+.decor-fundo span:nth-child(2) { top: 30%; left: 78%; font-size: 2.1rem; }
+.decor-fundo span:nth-child(3) { top: 58%; left: 10%; font-size: 1.3rem; }
+.decor-fundo span:nth-child(4) { top: 76%; left: 84%; font-size: 1.8rem; }
+.decor-fundo span:nth-child(5) { top: 86%; left: 22%; font-size: 1.2rem; }
+.decor-fundo span:nth-child(6) { top: 48%; left: 46%; font-size: 1.5rem; }
+
+@keyframes flutuarLento {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-22px) rotate(2deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Hero (boas-vindas)
+   -------------------------------------------------------------------------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  background: var(--corSuperficie);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioGrande);
+  box-shadow: var(--sombraCard);
+  padding: 2.4rem 2.6rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Faixa colorida no topo do cartão */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: var(--gradientePrimario);
+}
+
+.hero-selo {
+  display: inline-block;
+  background: var(--corDestaque);
+  color: #1d2733;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+:root[data-theme='original'] .hero-selo,
+:root[data-theme='roxo'] .hero-selo {
+  color: #173a4d;
+}
+
+:root[data-theme='verde'] .hero-selo {
+  color: #06170d;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--corTextoPrincipal);
+  margin-bottom: 0.7rem;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--corPrimaria);
+  position: relative;
+}
+
+/* Sublinhado desenhado sob a palavra destacada */
+.hero h1 em::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--corDestaque);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.hero-subtitulo {
+  color: var(--corTextoSuave);
+  font-size: 1.05rem;
+  max-width: 34rem;
+  margin-bottom: 1.4rem;
+}
+
+.hero-acoes {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.hero-stats {
+  list-style: none;
+  display: flex;
+  gap: 1.8rem;
+  flex-wrap: wrap;
+}
+
+.hero-stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--corFundoDestaque);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioMedio);
+  padding: 0.6rem 1.2rem;
+  min-width: 7rem;
+}
+
+.hero-stats strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--corPrimaria);
+}
+
+.hero-stats span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--corTextoSuave);
+}
+
+/* Mascote + balão de fala */
+.hero-mascote {
+  position: relative;
+  max-width: 240px;
+  margin: 0 auto;
+}
+
+.hero-balao {
+  position: absolute;
+  top: -14px;
+  right: -8px;
+  left: auto;
+  background: var(--corBalaoFundo);
+  color: var(--corBalaoTexto);
+  border: 2px solid var(--corPrimaria);
+  border-radius: var(--raioMedio);
+  box-shadow: var(--sombraSuave);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  max-width: 210px;
+  z-index: 2;
+  animation: trocarFala 0.45s ease;
+}
+
+/* Rabinho do balão */
+.hero-balao::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 26px;
+  width: 14px;
+  height: 14px;
+  background: var(--corBalaoFundo);
+  border-right: 2px solid var(--corPrimaria);
+  border-bottom: 2px solid var(--corPrimaria);
+  transform: rotate(45deg) skew(8deg, 8deg);
+}
+
+@keyframes trocarFala {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Lista de módulos (acordeões)
+   -------------------------------------------------------------------------- */
+.lista-modulos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 100%;
+}
+
+.lista-modulos-titulo {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--corTextoPrincipal);
+  padding-left: 0.2rem;
+}
+
+.modulo-card {
+  background: var(--corSuperficie);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioGrande);
+  box-shadow: var(--sombraSuave);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.modulo-card:hover {
+  border-color: var(--corBordaForte);
+}
+
+.modulo-card.aberto {
+  border-color: var(--corPrimaria);
+  box-shadow: var(--sombraCard);
+}
+
+/* Cabeçalho do acordeão */
+.modulo-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  padding: 1.1rem 1.4rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fontePrincipal);
+  transition: background-color 0.2s ease;
+}
+
+.modulo-cabecalho:hover {
+  background: var(--corFundoDestaque);
+}
+
+.modulo-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--gradientePrimario);
+  color: var(--corTexto);
+  font-size: 1.25rem;
+  font-weight: 900;
+  box-shadow: 0 4px 0 var(--corPrimariaEscura);
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.5, 1);
+}
+
+.modulo-card.aberto .modulo-numero {
+  transform: rotate(360deg) scale(1.08);
+}
+
+.modulo-infos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.modulo-titulo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--corTextoPrincipal);
+}
+
+.modulo-descricao {
+  font-size: 0.88rem;
+  color: var(--corTextoSuave);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modulo-contador {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--corPrimaria);
+  background: var(--corFundoDestaque);
+  border: 2px solid var(--corBorda);
+  border-radius: 999px;
+  padding: 0.25rem 0.8rem;
+}
+
+.modulo-chevron {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--corPrimaria);
+  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.modulo-card.aberto .modulo-chevron {
+  transform: rotate(180deg);
+}
+
+/* Corpo expansível: técnica de grid 0fr -> 1fr para animação suave */
+.modulo-corpo {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.3, 1, 0.4, 1);
+}
+
+.modulo-card.aberto .modulo-corpo {
+  grid-template-rows: 1fr;
+}
+
+.modulo-corpo-interno {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0 1.4rem;
+}
+
+.modulo-card.aberto .modulo-corpo-interno {
+  padding-bottom: 1.3rem;
+}
+
+/* Cartão de atividade dentro do módulo */
+.atividade-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: var(--corFundoDestaque);
+  border: 2px solid var(--corBorda);
+  border-radius: var(--raioMedio);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fontePrincipal);
+  /* Entra deslizando quando o módulo abre */
+  opacity: 0;
+  animation: surgirAtividade 0.45s ease forwards;
+  transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+@keyframes surgirAtividade {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.atividade-card:hover {
+  border-color: var(--corPrimaria);
+  transform: translateY(-2px);
+  box-shadow: var(--sombraSuave);
+}
+
+.atividade-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  flex-shrink: 0;
+  border-radius: var(--raioPequeno);
+  background: var(--corSuperficie);
+  border: 2px solid var(--corBorda);
+  color: var(--corPrimaria);
+}
+
+.atividade-icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.atividade-infos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.atividade-titulo {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--corTextoPrincipal);
+}
+
+.atividade-descricao {
+  font-size: 0.85rem;
+  color: var(--corTextoSuave);
+}
+
+.atividade-cta {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--corTexto);
+  background: var(--corPrimaria);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  box-shadow: 0 3px 0 var(--corPrimariaEscura);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.atividade-card:hover .atividade-cta {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--corPrimariaEscura);
+}
+
+.atividade-card:active .atividade-cta {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--corPrimariaEscura);
+}
+
+.modulo-vazio {
+  color: var(--corTextoSuave);
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+}
+
+/* Skeletons de carregamento */
+.skeleton-modulo {
+  height: 5.4rem;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Responsividade
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 1.8rem 1.5rem;
+  }
+
+  .hero-mascote {
+    max-width: 190px;
+    margin-top: 1.5rem;
+  }
+
+  .hero-balao {
+    right: 0;
+    max-width: 190px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modulo-cabecalho {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+
+  .modulo-contador {
+    order: 3;
+  }
+
+  .modulo-chevron {
+    order: 4;
+  }
+
+  .modulo-descricao {
+    white-space: normal;
+  }
+
+  .atividade-card {
+    flex-wrap: wrap;
+  }
+
+  .hero-stats {
+    gap: 0.8rem;
+  }
+
+  .hero-stats li {
+    min-width: 5.5rem;
+    padding: 0.5rem 0.8rem;
+  }
+}
