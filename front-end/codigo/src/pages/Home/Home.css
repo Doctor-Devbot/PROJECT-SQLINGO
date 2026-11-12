@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ==========================================================================
    Home — boas-vindas com mascote e módulos em acordeão
    ========================================================================== */
@@ -526,3 +527,48 @@
     padding: 0.5rem 0.8rem;
   }
 }
+=======
+#caminhoPrincipal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;            
+  margin: 2rem auto;      
+  background-color: var(--corFundoDestaque);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding-bottom: 2rem;
+}
+
+.btn-circulo {
+  background-color: var(--corPrimaria);
+  color: var(--corTexto);
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  margin: 3rem 0;
+  cursor: pointer;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-circulo:hover {
+  background-color: var(--corHover);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  #caminhoPrincipal {
+    width: 90%;
+  }
+  
+  .btn-circulo {
+    width: 6rem;
+    height: 6rem;
+    margin: 2rem 0;
+    font-size: 1.5rem;
+  }
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

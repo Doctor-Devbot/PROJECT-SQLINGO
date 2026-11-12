@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 /* ==========================================================================
    Barra lateral — mantém a estrutura original, com estado ativo animado,
    ícones e seletor de paletas de cor
    ========================================================================== */
 
+=======
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 #menuLateral {
   display: flex;
   flex-direction: column;
@@ -11,6 +14,7 @@
   top: 0;
   left: 0;
   width: 15%;
+<<<<<<< HEAD
   min-width: 200px;
   height: 100%;
   background-color: var(--corFundoDestaque);
@@ -190,11 +194,39 @@
   #menuLateral {
     width: 20%;
     min-width: 170px;
+=======
+  height: 100%;
+  background-color: var(--corFundoDestaque);
+  padding: 1rem 0;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  z-index: 100;
+}
+
+#logo {
+  margin-top: 1rem;
+  width: 80%;
+  margin-bottom: 2rem;
+  object-fit: contain;
+}
+
+#menuLateral .btn-global {
+  width: 75%;
+  height: 3.5rem;
+  margin-top: 1.5rem;
+  border-radius: 1rem;
+}
+
+/* Responsividade Média (Tablets/Notebooks pequenos) */
+@media (max-width: 1024px) {
+  #menuLateral {
+    width: 20%;
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
   }
 
   #menuLateral .btn-global {
     font-size: 1rem;
     height: 3rem;
+<<<<<<< HEAD
   }
 
   .aba-icone {
@@ -204,10 +236,18 @@
 }
 
 /* Mobile: sidebar vira barra superior */
+=======
+    width: 85%;
+  }
+}
+
+/* Responsividade Mobile (Telas pequenas) */
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 @media (max-width: 768px) {
   #menuLateral {
     position: relative;
     width: 100%;
+<<<<<<< HEAD
     min-width: 0;
     height: auto;
     flex-direction: row;
@@ -229,10 +269,23 @@
     width: auto;
     margin-top: 0;
     gap: 0.5rem;
+=======
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  #logo {
+    width: 25%;
+    margin: 0;
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
   }
 
   #menuLateral .btn-global {
     width: auto;
+<<<<<<< HEAD
     height: 2.6rem;
     padding: 0 0.9rem;
     font-size: 0.95rem;
@@ -309,3 +362,12 @@
     padding: 3px;
   }
 }
+=======
+    height: auto;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    margin: 0 0.5rem;
+    border-radius: 0.5rem;
+  }
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

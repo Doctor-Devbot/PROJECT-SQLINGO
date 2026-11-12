@@ -30,4 +30,8 @@ if __name__ == '__main__':
         AtividadeDAO.criar_tabela_atividade()
         ModuloDAO.criar_tabela_modulo()
         ListaAtividadeDAO.criar_tabela_lista_atividade()
+<<<<<<< HEAD
     app.run(debug=True, port=5001)
+=======
+    app.run(debug=True, port=5000)
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

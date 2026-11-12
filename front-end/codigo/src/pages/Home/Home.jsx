@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Mascote from '../../components/Mascote/Mascote';
@@ -15,15 +16,24 @@ const MENSAGENS_MASCOTE = [
 // Símbolos que flutuam no fundo da home
 const SIMBOLOS_FUNDO = ['SELECT', 'JOIN', 'WHERE', 'GROUP BY', 'ORDER BY', 'INSERT'];
 
+=======
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Home.css';
+
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 export default function Home() {
   const navigate = useNavigate();
   const [modulos, setModulos] = useState([]);
   const [listasAtividade, setListasAtividade] = useState([]);
   const [erro, setErro] = useState(null);
+<<<<<<< HEAD
   const [carregando, setCarregando] = useState(true);
   const [moduloAberto, setModuloAberto] = useState(null);
   const [indiceMensagem, setIndiceMensagem] = useState(0);
   const inicioRef = useRef(null);
+=======
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 
   useEffect(() => {
     // Busca os módulos e as listas de atividades simultaneamente do back-end Flask
@@ -38,15 +48,23 @@ export default function Home() {
       })
     ])
       .then(([dadosModulos, dadosListas]) => {
+<<<<<<< HEAD
         setModulos(dadosModulos);
         setListasAtividade(dadosListas);
         // Abre o primeiro módulo por padrão para o usuário já ver as atividades
         setModuloAberto(dadosModulos.length > 0 ? dadosModulos[0].id : null);
         setCarregando(false);
+=======
+        console.log("MÓDULOS RECEBIDOS:", dadosModulos);
+        console.log("LISTAS RECEBIDAS:", dadosListas);
+        setModulos(dadosModulos);
+        setListasAtividade(dadosListas);
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
       })
       .catch((err) => {
         console.error(err);
         setErro('Não foi possível carregar os dados da página.');
+<<<<<<< HEAD
         setCarregando(false);
       });
   }, []);
@@ -222,3 +240,53 @@ export default function Home() {
     </div>
   );
 }
+=======
+      });
+  }, []);
+
+  return (
+    <div className="home-container">
+      {erro && <p style={{ color: 'red', textAlign: 'center' }}>{erro}</p>}
+
+      {/* Renderiza um bloco (caminhoPrincipal) para cada Módulo */}
+      {modulos.length > 0 ? (
+        modulos.map((modulo) => {
+          // Filtra apenas as listas que pertencem a este módulo específico
+          const listasDoModulo = listasAtividade.filter(
+            (lista) => lista.modulo_id === modulo.id
+          );
+
+          return (
+            <section key={modulo.id} id="caminhoPrincipal">
+              <h1>{modulo.titulo}</h1>
+
+              {/* Botões criados dinamicamente de acordo com a quantidade de listas do módulo */}
+              <div className="botoes-container">
+                {listasDoModulo.length > 0 ? (
+                  listasDoModulo.map((lista, index) => (
+                    // No map das listas dentro do seu Home.jsx:
+                    <button
+                      key={lista.id}
+                      className="btn-circulo"
+                      onClick={() => navigate(`/atividade/${lista.id}`)} // <-- Passa o ID da lista na rota!
+                    >
+                      {index + 1}
+                    </button>
+                  ))
+                ) : (
+                  <p style={{ fontSize: '0.9rem', color: '#666' }}>Nenhuma lista cadastrada neste módulo.</p>
+                )}
+              </div>
+            </section>
+          );
+        })
+      ) : (
+        // Fallback caso os dados ainda estejam carregando ou ocorra algum atraso
+        <section id="caminhoPrincipal">
+          <h1>Carregando módulos...</h1>
+        </section>
+      )}
+    </div>
+  );
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

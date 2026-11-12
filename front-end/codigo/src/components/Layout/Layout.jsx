@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
@@ -46,3 +47,19 @@ export default function Layout() {
     </div>
   );
 }
+=======
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../Sidebar/Sidebar';
+import './Layout.css';
+
+export default function Layout() {
+  return (
+    <div className="layout-container">
+      <Sidebar />
+      <main className="conteudo-principal">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

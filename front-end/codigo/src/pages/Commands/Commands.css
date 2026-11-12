@@ -1,12 +1,16 @@
+<<<<<<< HEAD
 /* ==========================================================================
    Comandos — grade de cartões + caixa de detalhes (modal)
    ========================================================================== */
 
+=======
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 #comandos {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+<<<<<<< HEAD
   max-width: 1100px;
   gap: 2.2rem;
 }
@@ -398,3 +402,73 @@
     padding: 1.2rem 1.2rem 1.4rem;
   }
 }
+=======
+  gap: 2.5rem;
+}
+
+.secao-comandos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  background-color: var(--corFundoDestaque);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding-bottom: 2rem;
+}
+
+.secao-comandos ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+}
+
+.btn-comando {
+  background-color: var(--corPrimaria);
+  color: var(--corTexto);
+  border: none;
+  width: 12rem;
+  height: 8rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-comando:hover {
+  background-color: var(--corHover);
+  transform: translateY(-3px);
+}
+
+/* Responsividade para Comandos */
+@media (max-width: 1024px) {
+  .secao-comandos {
+    width: 95%;
+  }
+  
+  .btn-comando {
+    width: 9rem;
+    height: 6rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .secao-comandos ul {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .btn-comando {
+    width: 100%;
+    max-width: 15rem;
+    height: 5rem;
+  }
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

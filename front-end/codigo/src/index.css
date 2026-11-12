@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ==========================================================================
    SQLingo — Sistema de design global
    Contém: 3 paletas de cores (temas), tipografia e componentes compartilhados
@@ -149,6 +150,17 @@
 /* --------------------------------------------------------------------------
    Base
    -------------------------------------------------------------------------- */
+=======
+:root {
+  --corFundoDestaque: #e0e0e0;
+  --corPrimaria: #00b7ff;
+  --corHover: #004fa8;
+  --corTexto: white;
+  --corFundoSuave: #f9f9f9; /* Adicionando cor de fundo mais suave */
+  --fontePrincipal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografia mais moderna */
+}
+
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 * {
   box-sizing: border-box;
   margin: 0;
@@ -157,6 +169,7 @@
 }
 
 body {
+<<<<<<< HEAD
   background-color: var(--corFundo);
   color: var(--corTextoPrincipal);
   min-height: 100vh;
@@ -317,3 +330,45 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+=======
+  background-color: var(--corFundoSuave); /* Usando fundo mais suave */
+  min-height: 100vh;
+  line-height: 1.6; /* Melhorando legibilidade */
+}
+
+/* Título Padrão das Telas */
+h1 {
+  background-color: var(--corPrimaria);
+  color: var(--corTexto);
+  width: 100%;
+  padding: 1.2rem; /* Mais espaçamento */
+  margin: 0;
+  border-radius: 1rem 1rem 0 0;
+  text-align: center;
+  font-size: 1.8rem; /* Hierarquia mais clara */
+}
+
+/* Botão de Menu Global */
+.btn-global {
+  background: linear-gradient(135deg, var(--corPrimaria) 0%, #00d2ff 100%); /* Adicionando gradiente sutil */
+  color: var(--corTexto);
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.2); /* Sombra mais refinada */
+  border-radius: 1rem; /* Mais arredondado */
+  transition: background-image 0.3s, transform 0.2s, box-shadow 0.2s; /* Adicionando transições */
+}
+
+.btn-global:hover {
+  background: linear-gradient(135deg, var(--corHover) 0%, #0077c9 100%); /* Gradiente sutil no hover */
+  transform: translateY(-2px); /* Efeito sutil no hover */
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.25);
+}
+
+.btn-global:active {
+  transform: scale(0.97) translateY(0); /* Efeito no active */
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

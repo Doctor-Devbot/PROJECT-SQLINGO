@@ -28,6 +28,7 @@ class AtividadeDAO:
         
         # Distribuindo as atividades de exemplo para as listas correspondentes (ex: Lista 1 e Lista 2)
         atividades_lote = [
+<<<<<<< HEAD
             # ==========================================
             # MÓDULO 1 - SELECT
             # ==========================================
@@ -290,6 +291,19 @@ class AtividadeDAO:
                 "enunciado": "Uma escola deseja remover todos os registros de uma tabela temporária chamada matriculas_teste, utilizada apenas para simulações. Qual comando exclui todos os registros, mantendo a estrutura da tabela?",
                 "alternativas": json.dumps(["DELETE FROM matriculas_teste", "DROP TABLE matriculas_teste", "UPDATE matriculas_teste SET id = NULL", "SELECT * FROM matriculas_teste"]),
                 "lista_atividade_id": 12
+=======
+            {
+                "id": 1, 
+                "enunciado": "Qual comando SQL seleciona dados?", 
+                "alternativas": json.dumps(["SELECT", "INSERT", "DELETE", "UPDATE"]),
+                "lista_atividade_id": 1  # Pertence à Lista 1
+            },
+            {
+                "id": 2, 
+                "enunciado": "Qual cláusula filtra registros?", 
+                "alternativas": json.dumps(["WHERE", "ORDER BY", "GROUP BY", "JOIN"]),
+                "lista_atividade_id": 1  # Pertence à Lista 1 também, ou à Lista 2
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
             }
         ]
         db.session.execute(sql, atividades_lote)

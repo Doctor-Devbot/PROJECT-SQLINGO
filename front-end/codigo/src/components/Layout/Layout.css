@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 /* ==========================================================================
    Estrutura da página + animação de transição entre abas
    ========================================================================== */
 
+=======
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -10,11 +13,16 @@
 
 .conteudo-principal {
   flex: 1;
+<<<<<<< HEAD
   margin-left: 15%; /* espaço fixo para a Sidebar (mesmo valor do original) */
+=======
+  margin-left: 15%; /* Deixa espaço fixo para a Sidebar */
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
   padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+<<<<<<< HEAD
   position: relative;
   width: 100%;
 }
@@ -100,10 +108,16 @@
 }
 
 /* ---------- Responsividade ---------- */
+=======
+}
+
+/* Ajuste do layout quando a sidebar vira barra superior no mobile */
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 @media (max-width: 768px) {
   .layout-container {
     flex-direction: column;
   }
+<<<<<<< HEAD
 
   .conteudo-principal {
     margin-left: 0;
@@ -111,3 +125,12 @@
     padding: 1.2rem;
   }
 }
+=======
+  
+  .conteudo-principal {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Activity.css';
+<<<<<<< HEAD
 import Mascote from '../../components/Mascote/Mascote';
 import dicaImg from '../../assets/images/dica.png';
 import dicaDisableImg from '../../assets/images/dicaDisableTransparente.png';
@@ -14,13 +15,22 @@ const CONFETES = Array.from({ length: 18 }, (_, i) => ({
   rotacao: (i * 47) % 360,
 }));
 
+=======
+import dicaImg from '../../assets/images/dica.png';
+import dicaDisableImg from '../../assets/images/dicaDisableTransparente.png';
+
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
 export default function Activity() {
   const { idLista } = useParams();
   const navigate = useNavigate();
 
   const [atividades, setAtividades] = useState([]);
   const [indiceAtual, setIndiceAtual] = useState(0);
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
   const [selecionada, setSelecionada] = useState(null);
   const [verificado, setVerificado] = useState(false);
   const [usouDica, setUsouDica] = useState(false);
@@ -57,16 +67,24 @@ export default function Activity() {
     }
   }, [indiceAtual, atividades]);
 
+<<<<<<< HEAD
   if (erro) return <p className="activity-erro">{erro}</p>;
   if (atividades.length === 0) return <p className="activity-carregando">Carregando atividades...</p>;
 
   // TELA DE FINALIZAÇÃO comemorativa (mascote + confete)
+=======
+  if (erro) return <p style={{ color: 'red', textAlign: 'center', marginTop: '50px' }}>{erro}</p>;
+  if (atividades.length === 0) return <p style={{ textAlign: 'center', marginTop: '50px' }}>Carregando atividades...</p>;
+
+  // TELA DE FINALIZAÇÃO REESTRUTURADA COM O MESMO DESIGN DOS CARDS
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
   if (finalizado) {
     const percentualAcertos = Math.round((acertos / atividades.length) * 100);
     const totalPontos = acertos * 10;
 
     return (
       <div id="containerPrincipal">
+<<<<<<< HEAD
         <div className="confete-container" aria-hidden="true">
           {CONFETES.map((confete, i) => (
             <span
@@ -89,6 +107,12 @@ export default function Activity() {
           <h1>Parabéns!</h1>
           <h2>Atividade chegou ao fim!</h2>
 
+=======
+        <section id="menuPrincipal" className="card-finalizacao-conteudo">
+          <h1>Parabéns!</h1>
+          <h2>Atividade chegou ao fim!</h2>
+          
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
           <div className="finalizacao-stats-container">
             <div className="stat-box">
               <p>Acertos:</p>
@@ -99,6 +123,7 @@ export default function Activity() {
               <div className="stat-value">{totalPontos}</div>
             </div>
           </div>
+<<<<<<< HEAD
 
           <div className="finalizacao-botoes">
             <button
@@ -116,18 +141,36 @@ export default function Activity() {
             </button>
           </div>
         </section>
+=======
+        </section>
+
+        <button 
+          id="verificarBotao" 
+          onClick={() => navigate('/')}
+        >
+          Sair
+        </button>
+
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
       </div>
     );
   }
 
   const atividadeAtual = atividades[indiceAtual];
   const respostaCorreta = atividadeAtual.alternativas[0];
+<<<<<<< HEAD
   const questoesRespondidas = verificado ? indiceAtual + 1 : indiceAtual;
   const progresso = Math.round((questoesRespondidas / atividades.length) * 100);
 
   const handleDica = () => {
     if (usouDica || verificado) return;
 
+=======
+
+  const handleDica = () => {
+    if (usouDica || verificado) return;
+    
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
     const erradas = atividadeAtual.alternativas.filter(alt => alt !== respostaCorreta);
     const dicaOpcoes = [respostaCorreta, erradas[0]].sort(() => Math.random() - 0.5);
 
@@ -141,7 +184,11 @@ export default function Activity() {
   const handleVerificar = () => {
     if (!selecionada) return;
     setVerificado(true);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
     if (selecionada === respostaCorreta) {
       setAcertos((prev) => prev + 1);
     }
@@ -167,6 +214,7 @@ export default function Activity() {
   return (
     <div id="containerPrincipal">
       <section id="menuPrincipal">
+<<<<<<< HEAD
         {/* Barra de progresso da lista */}
         <div className="progresso-cabecalho">
           <span className="progresso-texto">
@@ -193,6 +241,19 @@ export default function Activity() {
             disabled={usouDica || verificado}
             className={usouDica || verificado ? 'dica-disable' : ''}
             title={usouDica || verificado ? 'Dica já utilizada' : 'Usar dica (remove duas alternativas)'}
+=======
+        <span style={{ fontSize: '0.9rem', color: '#666', fontWeight: 'bold' }}>
+          Questão {indiceAtual + 1} de {atividades.length}
+        </span>
+        <h1>Selecione a alternativa correta</h1>
+        <h2>
+          {atividadeAtual.enunciado}
+          <button 
+            id="dicaBotao" 
+            onClick={handleDica} 
+            disabled={usouDica || verificado}
+            className={usouDica || verificado ? 'dica-disable' : ''}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
           >
             <img src={(usouDica || verificado) ? dicaDisableImg : dicaImg} alt="Dica" />
           </button>
@@ -214,23 +275,39 @@ export default function Activity() {
       </section>
 
       {!verificado ? (
+<<<<<<< HEAD
         <button
           id="verificarBotao"
           className="btn-verificar"
+=======
+        <button 
+          id="verificarBotao" 
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
           onClick={handleVerificar}
           disabled={!selecionada}
         >
           Verificar
         </button>
       ) : (
+<<<<<<< HEAD
         <button
           id="verificarBotao"
           className={`btn-verificar ${selecionada === respostaCorreta ? 'btn-proxima-acerto' : 'btn-proxima-erro'}`}
           onClick={handleProxima}
+=======
+        <button 
+          id="verificarBotao" 
+          onClick={handleProxima}
+          style={{ backgroundColor: '#28a745', color: '#fff' }}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
         >
           {indiceAtual + 1 === atividades.length ? 'Finalizar' : 'Próxima'}
         </button>
       )}
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 213b4cfe8ee907e01c7fb20eeacc431f105244df
