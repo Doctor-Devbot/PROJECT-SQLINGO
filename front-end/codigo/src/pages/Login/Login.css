@@ -1,0 +1,309 @@
+/* =========================================================
+   Tela de Login — SQLingo
+   Segue o design system do projeto:
+   - Variáveis CSS globais (--corPrimaria, --corHover, etc.)
+   - Card com fundo --corFundoDestaque e sombra suave
+   - h1 com fundo azul arredondado no topo (igual às outras telas)
+   - Botão .btn-global reaproveitado do index.css
+   ========================================================= */
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--corFundoSuave);
+}
+
+/* ---------- Painel lateral (lado esquerdo) ---------- */
+.login-painel-lateral {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  padding: 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--corPrimaria) 0%, var(--corHover) 100%);
+  color: var(--corTexto);
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.login-logo-grande {
+  width: 60%;
+  max-width: 260px;
+  object-fit: contain;
+  margin-bottom: 2rem;
+  /* Sombra sutil para destacar o logo sobre o gradiente */
+  filter: drop-shadow(0 0.4rem 0.8rem rgba(0, 0, 0, 0.25));
+}
+
+.login-painel-titulo {
+  background: transparent;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 0;
+}
+
+.login-painel-texto {
+  max-width: 360px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.login-painel-rodape {
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ---------- Formulário (lado direito) ---------- */
+.login-form-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--corFundoDestaque);
+  border-radius: 1.5rem;
+  box-shadow: 0 0.6rem 1.8rem rgba(0, 0, 0, 0.12);
+  padding-bottom: 2.5rem;
+  text-align: center;
+  /* Animação suave de entrada */
+  animation: login-fade-in 0.4s ease-out;
+}
+
+@keyframes login-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* h1 reaproveita o estilo global (fundo azul, branco, topo arredondado) */
+.login-card h1 {
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+/* ---------- Formulário ---------- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 2rem 2.5rem 0;
+  text-align: left;
+}
+
+.login-label {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-top: 0.6rem;
+}
+
+.login-input {
+  width: 100%;
+  height: 3.2rem;
+  padding: 0 1rem;
+  font-size: 1rem;
+  font-family: var(--fontePrincipal);
+  color: #2c3e50;
+  background-color: #ffffff;
+  border: 2px solid transparent;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.08);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.login-input::placeholder {
+  color: #9aa3ad;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--corPrimaria);
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 183, 255, 0.25);
+}
+
+/* Wrapper para o campo de senha + botão Mostrar/Ocultar */
+.login-senha-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-senha-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--corHover);
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.4rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.login-senha-toggle:hover {
+  background-color: rgba(0, 183, 255, 0.12);
+  color: var(--corPrimaria);
+}
+
+/* ---------- Opções: lembrar senha + esqueci a senha ---------- */
+.login-opcoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.login-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: #2c3e50;
+}
+
+.login-checkbox input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--corPrimaria);
+  cursor: pointer;
+}
+
+.login-link {
+  color: var(--corHover);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.login-link:hover {
+  color: var(--corPrimaria);
+  text-decoration: underline;
+}
+
+.login-link-destaque {
+  font-size: 1rem;
+}
+
+/* ---------- Botão Entrar (reaproveita .btn-global) ---------- */
+.login-btn-entrar {
+  width: 100%;
+  height: 3.8rem;
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  border-radius: 1rem;
+}
+
+/* ---------- Divisor "ou" ---------- */
+.login-divisor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 2.5rem 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.login-divisor::before,
+.login-divisor::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: #c8ccd1;
+}
+
+/* ---------- Texto de cadastro ---------- */
+.login-cadastro {
+  margin: 1rem 2.5rem 0;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+/* =========================================================
+   Responsividade
+   ========================================================= */
+
+/* Tablets pequenos e notebooks */
+@media (max-width: 1024px) {
+  .login-painel-lateral {
+    width: 40%;
+    padding: 2rem;
+  }
+
+  .login-logo-grande {
+    width: 70%;
+  }
+
+  .login-painel-titulo {
+    font-size: 1.6rem;
+  }
+
+  .login-form {
+    padding: 1.5rem 2rem 0;
+  }
+
+  .login-divisor,
+  .login-cadastro {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
+
+/* Celulares — painel some e o card ocupa a tela */
+@media (max-width: 768px) {
+  .login-painel-lateral {
+    display: none;
+  }
+
+  .login-form-wrapper {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .login-card {
+    max-width: 100%;
+    border-radius: 1.2rem;
+  }
+
+  .login-form {
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .login-opcoes {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .login-divisor,
+  .login-cadastro {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .login-btn-entrar {
+    height: 3.4rem;
+    font-size: 1.2rem;
+  }
+}

@@ -1,31 +1,35 @@
 class Jogador:
-    def __init__(self, nome, email):
-        self.__nome = nome
-        self.__email = email
 
-    def get_nome(self):
-        return self.__nome
+  def __init__(self, nome, email, senha=None):
+    self.__nome = nome
+    self.__email = email
+    self.__senha = senha
 
-    def set_nome(self, nome):
-        if not nome.strip():
-            raise ValueError("Nome não pode ser vazio")
+  def get_nome(self):
+    return self.__nome
 
-        self.__nome = nome
+  def set_nome(self, nome):
+    if not nome.strip():
+      raise ValueError("Nome não pode ser vazio")
+    self.__nome = nome
 
-    def get_email(self):
-        return self.__email
+  def get_email(self):
+    return self.__email
 
-    def set_email(self, email):
-        if "@" not in email:
-            raise ValueError("Email inválido")
+  def set_email(self, email):
+    if "@" not in email:
+      raise ValueError("Email inválido")
+    self.__email = email
 
-        self.__email = email
+  def get_senha(self):
+    return self.__senha
 
-    def to_dic(self):
-        return {
-            "nome": self.__nome,
-            "email": self.__email
-        }
+  def set_senha(self, senha):
+    self.__senha = senha
 
-    def __str__(self):
-        return f"Jogador(nome='{self.__nome}', email='{self.__email}')"
+  def to_dic(self):
+    # Nota: nunca retorne a senha no dicionário por segurança!
+    return {"nome": self.__nome, "email": self.__email}
+
+  def __str__(self):
+    return f"Jogador(nome='{self.__nome}', email='{self.__email}')"
