@@ -1,0 +1,14 @@
+# Segredos: NUNCA subir o .env para o GitHub (Aula 15)
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Front-end (Vite/React)
+node_modules/
+dist/
+
+# Banco SQLite local: regenerado automaticamente na primeira execução
+*.db

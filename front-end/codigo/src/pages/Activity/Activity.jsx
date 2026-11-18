@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { urlApi } from '../../services/api';
 import './Activity.css';
 import dicaImg from '../../assets/images/dica.png';
 import dicaDisableImg from '../../assets/images/dicaDisableTransparente.png';
@@ -21,7 +22,7 @@ export default function Activity() {
   const [finalizado, setFinalizado] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/lista-atividade/${idLista}/atividades`)
+    fetch(urlApi(`/lista-atividade/${idLista}/atividades`))
       .then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar as questões');
         return res.json();

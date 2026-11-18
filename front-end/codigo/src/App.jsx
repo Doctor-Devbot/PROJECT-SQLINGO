@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout';
 import Home from './pages/Home/Home';
 import Commands from './pages/Commands/Commands';
 import Activity from './pages/Activity/Activity';
+import Jogadores from './pages/Jogadores/Jogadores';
 import Login from './pages/Login/Login';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="comandos" element={<Commands />} />
+          <Route path="jogadores" element={<Jogadores />} />
           <Route path="/atividade/:idLista" element={<Activity />} />
         </Route>
       </Routes>

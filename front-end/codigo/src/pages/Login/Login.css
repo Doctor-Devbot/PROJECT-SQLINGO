@@ -307,3 +307,15 @@
     font-size: 1.2rem;
   }
 }
+
+/* Mensagem de erro devolvida pela API (ex.: 401 e-mail ou senha inválidos) */
+.login-erro {
+  background-color: #fdecea;
+  color: #c62828;
+  border: 1px solid #f5c6c2;
+  border-radius: 0.6rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  margin: 0 1.5rem 1rem;
+  text-align: center;
+}

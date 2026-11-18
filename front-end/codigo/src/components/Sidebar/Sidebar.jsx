@@ -14,6 +14,12 @@ export default function Sidebar() {
       <button className="btn-global" onClick={() => navigate('/comandos')}>
         Comandos
       </button>
+      <button className="btn-global" onClick={() => navigate('/jogadores')}>
+        Jogadores
+      </button>
+      <button className="btn-global" onClick={() => navigate('/login')}>
+        Login
+      </button>
     </nav>
   );
 }

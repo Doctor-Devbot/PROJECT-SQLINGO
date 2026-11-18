@@ -2,20 +2,42 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../../assets/images/logoSQLingo2.png';
+import { login, salvarToken } from '../../services/api';
 
 export default function Login() {
   const navigate = useNavigate();
 
-  // Estado apenas para feedback visual (sem autenticação real)
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [lembrar, setLembrar] = useState(false);
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [erro, setErro] = useState(null);
+  const [carregando, setCarregando] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // Integração com o back-end: POST /login da classe Jogador
     e.preventDefault();
-    // Visual apenas: redireciona para a home
-    navigate('/');
+    setErro(null);
+
+    if (!email || !senha) {
+      setErro('Preencha o e-mail e a senha para entrar.');
+      return;
+    }
+
+    try {
+      setCarregando(true);
+      const dados = await login(email, senha);
+
+      // Guarda o token JWT retornado pela API (Authorization: Bearer)
+      salvarToken(dados.access_token);
+
+      navigate('/');
+    } catch (errApi) {
+      // 401 -> e-mail ou senha inválidos (resposta da API)
+      setErro(errApi.message || 'Não foi possível entrar. Tente novamente.');
+    } finally {
+      setCarregando(false);
+    }
   };
 
   return (
@@ -35,6 +57,9 @@ export default function Login() {
       <main className="login-form-wrapper">
         <section className="login-card">
           <h1>Entrar</h1>
+
+          {/* Mensagem de erro devolvida pela API (ex.: 401 e-mail/senha) */}
+          {erro && <p className="login-erro">{erro}</p>}
 
           <form className="login-form" onSubmit={handleSubmit}>
             <label className="login-label" htmlFor="email">
@@ -88,8 +113,12 @@ export default function Login() {
               </a>
             </div>
 
-            <button type="submit" className="btn-global login-btn-entrar">
-              Entrar
+            <button
+              type="submit"
+              className="btn-global login-btn-entrar"
+              disabled={carregando}
+            >
+              {carregando ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 

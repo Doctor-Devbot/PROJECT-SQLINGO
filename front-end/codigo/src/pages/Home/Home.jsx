@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { urlApi } from '../../services/api';
 import './Home.css';
 
 export default function Home() {
@@ -11,11 +12,11 @@ export default function Home() {
   useEffect(() => {
     // Busca os módulos e as listas de atividades simultaneamente do back-end Flask
     Promise.all([
-      fetch('http://localhost:5000/modulo').then((res) => {
+      fetch(urlApi('/modulo')).then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar os módulos');
         return res.json();
       }),
-      fetch('http://localhost:5000/lista-atividade').then((res) => {
+      fetch(urlApi('/lista-atividade')).then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar as listas de atividades');
         return res.json();
       })
