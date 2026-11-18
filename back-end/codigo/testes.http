@@ -1,0 +1,148 @@
+### ===================================================================
+###  testes.http - Testes da API SQLINGO na nuvem (Aula 15)
+###  Extensão do VS Code: REST Client (humao.rest-client)
+###  Basta clicar em "Send Request" acima de cada requisição.
+###
+###  IMPORTANTE: troque a URL abaixo pela URL pública gerada no Render
+###  (algo como https://sqlingo.onrender.com). Para testar em local,
+###  troque para http://127.0.0.1:5000
+### ===================================================================
+
+### Variável de ambiente com a URL da API na nuvem
+@baseUrl = https://sqlingo.onrender.com
+
+### ===================================================================
+### 1. Testes do relacionamento Muitos-para-Muitos (jogador_atividade)
+### ===================================================================
+
+### 1.1 Cadastro de jogador com vínculos N:N (HTTP 201 Created)
+# "atividades_ids" é a lista de IDs das atividades resolvidas pelo jogador
+# (funciona igual ao "grupos_ids" da Aula 14). Os vínculos são gravados
+# na tabela intermediária jogador_atividade.
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Carlos Eduardo",
+  "email": "carlos@email.com",
+  "senha": "123456",
+  "atividades_ids": [1, 3]
+}
+
+### 1.2 Cadastro de jogador sem vínculos (atividades_ids é opcional)
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Maria Silva",
+  "email": "maria@email.com",
+  "senha": "123456"
+}
+
+### 1.3 Listagem de todos os jogadores com o JSON aninhado do N:N
+# Cada jogador retorna com a lista "atividades_ids" (HTTP 200 OK)
+GET {{baseUrl}}/jogador
+
+### 1.4 Busca de um jogador pelo e-mail (JSON aninhado incluído)
+GET {{baseUrl}}/jogador/carlos@email.com
+
+### ===================================================================
+### 2. Testes de validação de erro
+### ===================================================================
+
+### 2.1 Campos obrigatórios ausentes (HTTP 400)
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Usuario Sem Email",
+  "senha": "123456"
+}
+
+### 2.2 E-mail duplicado (HTTP 400)
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Carlos Duplicado",
+  "email": "carlos@email.com",
+  "senha": "123456"
+}
+
+### 2.3 "atividades_ids" com formato inválido (HTTP 400)
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Carlos Invalido",
+  "email": "invalido@email.com",
+  "senha": "123456",
+  "atividades_ids": "um, dois"
+}
+
+### 2.4 Atividade inexistente no vínculo N:N (HTTP 500 / Rollback)
+# No MySQL da nuvem (Aiven) a chave estrangeira barraria o id 99999 e a API
+# responde 500 com rollback. No SQLite local o teste só é garantido na nuvem,
+# pois o SQLite não impõe chaves estrangeiras por padrão.
+POST {{baseUrl}}/jogador
+Content-Type: application/json
+
+{
+  "nome": "Jogador Com Atividade Inexistente",
+  "email": "inexistente@email.com",
+  "senha": "123456",
+  "atividades_ids": [99999]
+}
+
+### ===================================================================
+### 3. Login e endpoints protegidos por JWT
+### ===================================================================
+
+### 3.1 Login (HTTP 200 - gera o access_token)
+# A resposta guarda o token na variável @token para os testes protegidos
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "carlos@email.com",
+  "senha": "123456"
+}
+
+### 3.2 Endpoint protegido com o token capturado do login (HTTP 200)
+@token = {{login.response.body.access_token}}
+# @name perfil
+GET {{baseUrl}}/perfil/protegido
+Authorization: Bearer {{token}}
+
+### 3.3 Logout (HTTP 200)
+POST {{baseUrl}}/logout
+
+### ===================================================================
+### 4. Paginação de jogadores (consumida pelo front-end)
+### ===================================================================
+
+### 4.1 Página 1 com 5 jogadores por página (HTTP 200)
+GET {{baseUrl}}/jogador/paginacao?pag=1&por_pagina=5
+
+### 4.2 Página 2 com 5 jogadores por página (HTTP 200)
+GET {{baseUrl}}/jogador/paginacao?pag=2&por_pagina=5
+
+### 4.3 Parâmetros faltando: erro 400
+GET {{baseUrl}}/jogador/paginacao
+
+### ===================================================================
+### 5. Endpoints consumidos pelas telas do front-end
+### ===================================================================
+
+### 5.1 Módulos da página inicial (HTTP 200)
+GET {{baseUrl}}/modulo
+
+### 5.2 Listas de atividades da página inicial (HTTP 200)
+GET {{baseUrl}}/lista-atividade
+
+### 5.3 Atividades da Lista 1 (tela de Activity) (HTTP 200)
+GET {{baseUrl}}/lista-atividade/1/atividades
+
+### 5.4 Todas as atividades cadastradas (HTTP 200)
+GET {{baseUrl}}/atividade

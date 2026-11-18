@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     jwt_required,
 )
 from repository.jogador_repository import JogadorRepository
+from services.db_service import db
 from services.jogador_service import JogadorService
 
 jogador_bp = Blueprint("jogador", __name__)
@@ -50,24 +51,40 @@ def cadastrar_jogador():
   email = dados.get("email")
   senha_pura = dados.get("senha")
 
+  # Relacionamento N:N (Aula 14): lista opcional de IDs de atividades
+  # resolvidas pelo jogador, enviada no JSON como "atividades_ids": [1, 3]
+  atividades_ids = dados.get("atividades_ids") or []
+
   if not nome or not email or not senha_pura:
     return {"erro": "Nome, email e senha são obrigatórios"}, 400
 
   if JogadorDAO.retrieve_by_email(email):
     return {"erro": "Email já cadastrado"}, 400
 
+  if not isinstance(atividades_ids, list) or not all(
+      isinstance(id_ativ, int) and not isinstance(id_ativ, bool)
+      for id_ativ in atividades_ids
+  ):
+    return {"erro": "O campo 'atividades_ids' deve ser uma lista de inteiros"}, 400
+
   try:
     # Criptografa a senha antes de salvar no banco
     senha_hash = bcrypt.generate_password_hash(senha_pura).decode("utf-8")
 
-    jogador_criado = JogadorDAO.create(nome, email, senha_hash)
+    # O Repository orquestra a gravação relacional completa:
+    # jogador (tabela principal) + vínculos N:N (jogador_atividade)
+    jogador_criado = jogador_repo.salvar(nome, email, senha_hash, atividades_ids)
     if jogador_criado:
       jogador_criado.pop(
           "senha", None
       )  # Remove a senha do retorno JSON por segurança
     return jogador_criado, 201
-  except Exception as e:
+  except ValueError as e:
     return {"erro": str(e)}, 400
+  except Exception as e:
+    # Aula 14: falha em qualquer etapa da gravação relacional -> rollback
+    db.session.rollback()
+    return {"erro": f"Falha ao salvar dados: {str(e)}"}, 500
 
 
 # Nova Rota de Login (Gera o Token JWT)
@@ -134,13 +151,17 @@ def logout():
 
 @jogador_bp.route("/jogador", methods=["GET"])
 def todos_jogadores():
-  jogadores = JogadorDAO.retrieve_all()
-  return jogadores, 200
+  # JSON aninhado: cada jogador vem com a lista "atividades_ids" (N:N)
+  try:
+    jogadores = jogador_repo.buscar_todos()
+    return jogadores, 200
+  except Exception as e:
+    return {"erro": f"Falha ao buscar dados: {str(e)}"}, 500
 
 
 @jogador_bp.route("/jogador/<string:email>", methods=["GET"])
 def buscar_jogador(email):
-  jogador = JogadorDAO.retrieve_by_email(email)
+  jogador = jogador_repo.buscar_por_email(email)
   if not jogador:
     return {"erro": "Jogador não encontrado"}, 404
   jogador.pop("senha", None)

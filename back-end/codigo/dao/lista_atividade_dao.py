@@ -1,15 +1,21 @@
 from sqlalchemy import text
-from services.db_service import db
+from services.db_service import (
+    db,
+    chave_autoincremento,
+    tipo_texto,
+    prefixo_insert_ignorado,
+)
 
 class ListaAtividadeDAO:
 
     @staticmethod
     def criar_tabela_lista_atividade():
-        sql = text("""
+        # DDL compatível com SQLite (local) e MySQL (nuvem) - Aula 14
+        sql = text(f"""
             CREATE TABLE IF NOT EXISTS listas_atividade (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                titulo TEXT NOT NULL,
-                descricao TEXT,
+                id INTEGER PRIMARY KEY {chave_autoincremento()},
+                titulo {tipo_texto(100)} NOT NULL,
+                descricao {tipo_texto(255)},
                 modulo_id INTEGER,
                 FOREIGN KEY (modulo_id) REFERENCES modulos(id)
             );
@@ -20,8 +26,9 @@ class ListaAtividadeDAO:
 
     @staticmethod
     def popular_tabela():
-        sql = text("""
-            INSERT OR IGNORE INTO listas_atividade (id, titulo, descricao, modulo_id)
+        # INSERT IGNORE (MySQL) / INSERT OR IGNORE (SQLite): evita duplicar os seed
+        sql = text(f"""
+            {prefixo_insert_ignorado()} INTO listas_atividade (id, titulo, descricao, modulo_id)
             VALUES (:id, :titulo, :descricao, :modulo_id);
         """)
         listas_lote = [

@@ -24,6 +24,8 @@ class JogadorService:
     def cadastrar_jogador(self, dados):
         nome = dados.get("nome")
         email = dados.get("email")
+        senha = dados.get("senha")
+        atividades_ids = dados.get("atividades_ids") or []
 
         # Regra 1: Campos obrigatórios
         if not nome or not email:
@@ -37,7 +39,11 @@ class JogadorService:
         if self.jogador_repo.email_ja_cadastrado(email):
             raise ValueError("Este e-mail já está em uso por outro jogador.")
 
-        return self.jogador_repo.salvar(nome, email)
+        # Regra 4: Relacionamento N:N - lista de IDs de atividades
+        if not isinstance(atividades_ids, list):
+            raise ValueError("O campo 'atividades_ids' deve ser uma lista de inteiros.")
+
+        return self.jogador_repo.salvar(nome, email, senha, atividades_ids)
 
     def atualizar_nome(self, email, dados):
         nome = dados.get("nome")
@@ -53,6 +59,16 @@ class JogadorService:
             raise ValueError("Jogador não encontrado.")
 
         return jogador_atualizado
+
+    def listar_jogadores_paginacao(self, pagina, por_pagina):
+        """Delega ao repositório a busca paginada com JSON aninhado do N:N."""
+        if pagina <= 0:
+            raise ValueError("O número da página deve ser maior que zero.")
+
+        if por_pagina <= 0:
+            raise ValueError("A quantidade de registros por página deve ser maior que zero.")
+
+        return self.jogador_repo.jogadores_paginacao(pagina, por_pagina)
 
     def deletar_jogador(self, email):
         if not email or "@" not in email:

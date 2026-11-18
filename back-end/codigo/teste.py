@@ -27,9 +27,11 @@ atividade = Atividade(
     1,
     "Qual comando SQL seleciona dados?",
     ["SELECT", "INSERT", "DELETE", "UPDATE"],
-    jogador,
-    resposta
+    resposta=resposta
 )
+
+# Jogador extra para demonstrar o N:N (uma atividade -> vários jogadores)
+jogadora = Jogador("Ana", "ana@email.com")
 
 print(atividade)
 
@@ -39,6 +41,28 @@ if hasattr(atividade, "get_enunciado"):
     print("Enunciado:", atividade.get_enunciado())
 if hasattr(atividade, "get_alternativas"):
     print("Alternativas:", atividade.get_alternativas())
+
+print("\n=== TESTANDO RELACIONAMENTO N:N (Jogador x Atividade) ===")
+# Um jogador pode resolver várias atividades; uma atividade pode ser
+# resolvida por vários jogadores (tabela jogador_atividade no banco).
+jogador.adicionar_atividade(atividade)
+jogadora.adicionar_atividade(atividade)
+
+print("Jogador com vínculos:", jogador)
+print("Jogadora com vínculos:", jogadora)
+print("Atividade e seus jogadores:", atividade)
+print("IDs das atividades do jogador:", jogador.atividades_ids())
+print("Jogadores da atividade:", atividade.jogadores_ids())
+
+# Vínculo duplicado deve ser barrado (chave composta N:N)
+try:
+    jogador.adicionar_atividade(atividade)
+except ValueError as e:
+    print("Erro esperado (vínculo duplicado):", e)
+
+# Desvincular também funciona (DELETE na tabela intermediária)
+jogador.remover_atividade(atividade)
+print("Após remover o vínculo:", jogador)
 
 if hasattr(atividade, "set_enunciado"):
     atividade.set_enunciado("Novo enunciado")

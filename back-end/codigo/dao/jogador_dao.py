@@ -1,4 +1,4 @@
-from services.db_service import db
+from services.db_service import db, chave_autoincremento, tipo_texto
 from sqlalchemy import text
 
 
@@ -6,12 +6,13 @@ class JogadorDAO:
 
   @staticmethod
   def criar_tabela_jogador():
-    sql = text("""
+    # DDL compatível com SQLite (local) e MySQL (nuvem) - Aula 14
+    sql = text(f"""
             CREATE TABLE IF NOT EXISTS jogadores (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                senha TEXT NOT NULL
+                id INTEGER PRIMARY KEY {chave_autoincremento()},
+                nome {tipo_texto(100)} NOT NULL,
+                email {tipo_texto(100)} UNIQUE NOT NULL,
+                senha {tipo_texto(200)} NOT NULL
             );
         """)
     db.session.execute(sql)

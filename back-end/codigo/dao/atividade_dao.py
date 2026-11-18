@@ -1,16 +1,23 @@
 import json
 from sqlalchemy import text
-from services.db_service import db
+from services.db_service import (
+    db,
+    chave_autoincremento,
+    tipo_texto,
+    prefixo_insert_ignorado,
+)
 
 class AtividadeDAO:
 
     @staticmethod
     def criar_tabela_atividade():
-        sql = text("""
+        # DDL compatível com SQLite (local) e MySQL (nuvem) - Aula 14
+        # alternativas é um JSON (texto longo): usa TEXT nos dois bancos
+        sql = text(f"""
             CREATE TABLE IF NOT EXISTS atividades (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                enunciado TEXT NOT NULL,
-                alternativas TEXT NOT NULL,
+                id INTEGER PRIMARY KEY {chave_autoincremento()},
+                enunciado {tipo_texto(500)} NOT NULL,
+                alternativas {tipo_texto()} NOT NULL,
                 lista_atividade_id INTEGER,
                 FOREIGN KEY (lista_atividade_id) REFERENCES listas_atividade(id)
             );
@@ -21,8 +28,9 @@ class AtividadeDAO:
 
     @staticmethod
     def popular_tabela():
-        sql = text("""
-            INSERT OR IGNORE INTO atividades (id, enunciado, alternativas, lista_atividade_id)
+        # INSERT IGNORE (MySQL) / INSERT OR IGNORE (SQLite): evita duplicar os seed
+        sql = text(f"""
+            {prefixo_insert_ignorado()} INTO atividades (id, enunciado, alternativas, lista_atividade_id)
             VALUES (:id, :enunciado, :alternativas, :lista_atividade_id);
         """)
         
